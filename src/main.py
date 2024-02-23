@@ -6,6 +6,7 @@ from enum import Enum, unique
 import click
 
 from formatters.styles.gost import GOSTCitationFormatter
+from formatters.styles.apa import APACitationFormatter
 from logger import get_logger
 from readers.reader import SourcesReader
 from renderer import Renderer
@@ -31,7 +32,7 @@ class CitationEnum(Enum):
     "-c",
     "citation",
     type=click.Choice([item.name for item in CitationEnum], case_sensitive=False),
-    default=CitationEnum.GOST.name,
+    default=CitationEnum.APA.name,
     show_default=True,
     help="Стиль цитирования",
 )
@@ -54,7 +55,7 @@ class CitationEnum(Enum):
     help="Путь к выходному файлу",
 )
 def process_input(
-    citation: str = CitationEnum.GOST.name,
+    citation: str = CitationEnum.APA.name,
     path_input: str = INPUT_FILE_PATH,
     path_output: str = OUTPUT_FILE_PATH,
 ) -> None:
@@ -78,7 +79,7 @@ def process_input(
 
     models = SourcesReader(path_input).read()
     formatted_models = tuple(
-        str(item) for item in GOSTCitationFormatter(models).format()
+        str(item) for item in APACitationFormatter(models).format()
     )
 
     logger.info("Генерация выходного файла ...")
